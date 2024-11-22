@@ -1,0 +1,65 @@
+#updates with every new container-all the containers
+
+#docker-compose -p comp3095-microservices-ecommerce -f docker-compose.yml up -d --build
+# start containers in detached mode
+#docker-compose -p comp3095-microservices-ecommerce -f docker-compose.yml up -d --build
+#version: '3.9'
+
+services:
+  #run text file that instantiates images
+  product-service:
+    image: product-service
+    #ex:in - external for using host machine
+    ports:
+      - "8084:8084"
+    build:
+      context: ./product-service       #context is path where dockerfile is
+      dockerfile: ./Dockerfile #speciy the Dockerfile for use to build image
+    container_name: product-service
+    environment:
+      #two envs-one for docker container 1 for in machine-may run differently
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - mongodb #name of the service
+    networks:
+      - spring
+  mongodb:
+    image: mongo:5 #can put a version-but if not provided, then latest
+    container_name: mongodbb #names need to be unique
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    #save the data on host machine-without, will disappear after close
+    volumes:
+      #will be created when run
+      - ./data/mongo/products:/data/db
+      - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js/mongo-init.js:ro
+      #in the mongo-init.js, inside of this package -looks for script to run
+    #restart: unless-stopped - container that boots when computer boots
+    #command: mongo -auth
+    networks:
+      - spring
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pass
+      - ME_CONFIG-MONGODB_SERVER=mongodb #connect mongo-express to mongodb
+    container_name: mongo-expresso
+    #restart: unless-stopped
+    depends_on:
+      - mongodb #since mongoexpress connects to mongodb, add depends
+    networks:
+      - spring
+
+volumes:
+  mongodb:
+    driver: local # use local driver to persist data on the host
+networks:
+  spring:
+    driver: bridge # bridge allows isolated communication between containers
