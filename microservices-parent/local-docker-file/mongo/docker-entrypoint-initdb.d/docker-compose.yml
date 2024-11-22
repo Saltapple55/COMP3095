@@ -1,8 +1,8 @@
 #updates with every new container-all the containers
 
-#docker-compose -p comp3095-microservices-ecommerce -f docker-compose.yml up -d --build
+#docker-compose -p comp3095-microservices-ecommerce -f docker-compose-single.yml up -d --build
 # start containers in detached mode
-#docker-compose -p comp3095-microservices-ecommerce -f docker-compose.yml up -d --build
+#docker-compose -p comp3095-microservices-ecommerce -f docker-compose-single.yml up -d --build
 #version: '3.9'
 
 services:

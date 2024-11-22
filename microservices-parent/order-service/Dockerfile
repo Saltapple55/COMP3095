@@ -18,14 +18,14 @@ FROM openjdk:21-jdk
 #create /app dir inside container
 RUN mkdir /app
 #copy already created jar file inside of homegradle/src/libs into /app folder name it ps.jar
-COPY --from=builder /home/gradle/src/build/libs/*.jar /app/product-service.jar
+COPY --from=builder /home/gradle/src/build/libs/*.jar /app/order-service.jar
 
 #
-ENV MONGO_DB_USERNAME=admin \
-    MONGO_DB_PWD=pass
+ENV POSTGRES_USERNAME=admin \
+    POSTGRES_PASSWORD=password
 #expose point 8084 of our container
-EXPOSE 8084
+EXPOSE 8082
 
 #entrypoint defines command to run when container starts
 #command line analogy: java -har /app/product-service.jar
-ENTRYPOINT ["java", "-jar", "/app/product-service.jar"]
+ENTRYPOINT ["java", "-jar", "/app/order-service.jar"]

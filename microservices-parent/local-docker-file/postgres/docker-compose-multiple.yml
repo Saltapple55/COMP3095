@@ -2,18 +2,20 @@ volumes:
   volume_name:                                 # <- Rename "volume_name"
     name: pgres
 services:
+  #PS C:\Users\tjand\COMP3095 Java\microservices-parent\local-docker-file\postgres> docker-compose -p docker-multiple -f docker-compose-multiple.yml up -d
   #run text file that instantiates images
   postgres:
     image: postgres
     ports:
-      - "5433:5432" #default numbers
-    container_name: postgres-single
+      - "5434:5432" #dff numbers for each db
+    container_name: postgres-inventory
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=inventory-service
     volumes:
-      - ./data/order:/var/lib/postgresql/data
-      - ./init/order/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/inventory:/var/lib/postgresql/data
+      - ./init/inventory/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     #no network bc local
  #GUI
@@ -21,7 +23,7 @@ services:
     image: dpage/pgadmin4
     ports:
       - "8888:80"
-    container_name: pgadmin-single
+    container_name: pgadmin-inventory
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.ca
       - PGADMIN_DEFAULT_PASSWORD=password

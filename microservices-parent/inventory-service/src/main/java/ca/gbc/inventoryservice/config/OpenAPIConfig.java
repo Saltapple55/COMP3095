@@ -1,4 +1,4 @@
-package ca.gbc.orderservice.config;
+package ca.gbc.inventoryservice.config;
 
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 //for documentation of our product service
 @Configuration
 public class OpenAPIConfig {
-    @Value("${order-service.version}")
+    @Value("${inventory-service.version}")
     private String verison;
     @Bean
     public OpenAPI productServiceAPI(){
         return new OpenAPI()
-                .info(new Info().title("Order Service")
+                .info(new Info().title("O Service")
                         .description("This is the rest api for order service")
                         .version(verison)
                         .license(new License().name("Apache 2.0")))

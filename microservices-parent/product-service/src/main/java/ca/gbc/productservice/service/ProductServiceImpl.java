@@ -47,13 +47,14 @@ public class ProductServiceImpl implements ProductService
         log.debug("Returning a list of products");
         List<Product> products=productRepository.findAll();
 
+
         //return products.stream().map(product -> mapToProductResponse(product)).toList() //collection can be stream-one record at a time but comming in as a collection
         return products.stream().map(this::mapToProductResponse).toList();
     }
-
     private  ProductResponse mapToProductResponse(Product product){
-        return new ProductResponse(product.getId(), product.getName(), product.getDescription(), product.getPrice());
+        return new ProductResponse(product.getId(),  product.getName(), product.getDescription(), product.getPrice());
     }
+
     private final MongoTemplate mongoTemplate;
 
     @Override

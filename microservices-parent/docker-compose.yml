@@ -1,0 +1,217 @@
+#updates with every new container-all the containers
+
+#docker-compose -p comp3095-microservices-ecommerce -f docker-compose-single.yml up -d --build
+# start containers in detached mode
+#docker-compose -p comp3095-microservices-ecommerce -f docker-compose-single.yml up -d --build
+#version: '3.9'
+
+#to add order-service, have to create integration tests by yourelf
+services:
+  #run text file that instantiates images
+  #container isolates a small section in host, to run a new service-no other things in host and
+  keycloak:
+    container_name: keycloak
+    hostname: keycloak
+    image: quay.io/keycloak/keycloak:24.0.1
+    #realms are configurations, backend client,
+    #start in dev mode, import realms - 1 for many backend solutions
+    command: [ "start-dev", "--import-realm" ]
+    environment:
+      DB_VENDOR: postgres
+      #docker allocates ids,  - should match
+      DB_ADDR: postgres-keycloak
+      #db has own login, so does keycloak
+      DB_DATABASE: admin
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+      ROOT_LOGLEVEL: DEBUG
+      JBOSS_LOG_MANAGER_ROOT_LOGGER: DEBUG, stdout, FILE
+    ports:
+      - "8080:8080"
+    volumes:
+      #configuration folder- if want to export
+      #map from host machine to container -
+      - ./local-docker-file/keycloak/realms/:/opt/keycloak/data/import
+    depends_on:
+      - postgres-keycloak
+    networks:
+      - spring
+
+  api-gateway:
+    image: api-gateway
+    ports:
+      - "9000:9000"
+    build:
+      context: ./api-gateway
+      dockerfile: ./Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+#      SPRING_APPLICATION_JSON={"logging":{"level":{"root":"INFO","ca.gbc.apigateway": "DEBUG" }}}
+    container_name: api-gateway
+    networks:
+      - spring
+
+
+
+  postgres-keycloak:
+    image: postgres
+    ports:
+      - "5431:5432" #default numbers
+    container_name: postgres-keycloak
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/data/postgres
+    volumes:
+      #where container is in db
+      - ./data/postgres/postgres-keycloak:/data/postgres
+    networks:
+      - spring
+
+  postgres-inventory:
+    image: postgres #can put a version-but if not provided, then latest
+    container_name: postgres-inventory #names need to be unique
+    ports:
+      - "5433:5432"
+    environment:
+     - POSTGRES_USER=admin
+     - POSTGRES_PASSWORD=password
+    volumes:
+      #will be created when run
+      #external folder: internal container
+      - ./data/inventory:/data/db
+      - ./init/inventory/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      #in the mongo-init.js, inside of this package -looks for script to run
+    #restart: unless-stopped - container that boots when computer boots
+    #command: mongo -auth
+    networks:
+      - spring
+  postgres-order:
+    image: postgres #can put a version-but if not provided, then latest
+    container_name: postgres-order #names need to be unique
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    volumes:
+      #will be created when run
+      #external folder: internal container
+      - ./data/order:/data/db
+      - ./init/order/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      #in the mongo-init.js, inside of this package -looks for script to run
+    #restart: unless-stopped - container that boots when computer boots
+    #command: mongo -auth
+    networks:
+      - spring
+
+  inventory-service:
+    #will look on the machine, then dockerhub, then it creates
+    image: inventory-service #what the container is built from- steps to run that process- provide build context
+    ports:
+      - "8083:8083" #match to application-docker properties
+    container_name: inventory-service
+    build:
+      context: ./inventory-service
+      dockerfile: ./Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    networks:
+      - spring
+      #two envs-one for docker container 1 for in machine-may run differently
+
+    #docker-compose -p postgres-inventory-single -f docker-compose-multiple.yml up -d
+    #no network bc local
+  order-service:
+    image: order-service
+    ports:
+      - "8082:8082"
+    container_name: order-service
+    build:
+      context: ./order-service
+      dockerfile: ./Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    networks:
+      - spring
+     #GUI
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8888:80"
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.ca
+      - PGADMIN_DEFAULT_PASSWORD=password
+    networks:
+      - spring
+
+#
+  #run text file that instantiates images
+  product-service:
+    image: product-service
+    #ex:in - external for using host machine
+    ports:
+      - "8084:8084"
+    build:
+      context: ./product-service       #context is path where dockerfile is
+      dockerfile: ./Dockerfile #speciy the Dockerfile for use to build image
+    container_name: product-service
+    environment:
+      #two envs-one for docker container 1 for in machine-may run differently
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - mongodb #name of the service
+    networks:
+      - spring
+  mongodb:
+    image: mongo #can put a version-but if not provided, then latest
+    container_name: mongodb #names need to be unique
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    #save the data on host machine-without, will disappear after close
+    volumes:
+      #will be created when run
+      #external folder: internal container
+      - ./data/mongo/products:/data/db
+      - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      #in the mongo-init.js, inside of this package -looks for script to run
+    #restart: unless-stopped - container that boots when computer boots
+    #command: mongo -auth
+    networks:
+      - spring
+#one mongo express per mongodb, but one pgadmin for all postgres
+  mongo-expresso:
+    image: mongo-express
+    #restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb #connect mongo-express to mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+    container_name: mongo-expresso
+    #restart: unless-stopped
+    depends_on:
+      - mongodb #since mongoexpress connects to mongodb, add depends
+    networks:
+      - spring
+#volume is disk space used by container
+volumes:
+  postgres:
+    driver: local # use local driver to persist data on the host
+  mongodb:
+    driver: local # use local driver to persist data on the host
+networks:
+  spring:
+    driver: bridge # bridge allows isolated communication between containers

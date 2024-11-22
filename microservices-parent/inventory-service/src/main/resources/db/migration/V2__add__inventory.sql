@@ -1,7 +1,10 @@
-CREATE TABLE t_inventory (
-    id BIGSERIAL NOT NULL,
-    sku_code VARCHAR(255),
-    quantity INT,
-    PRIMARY KEY (id)
+INSERT INTO t_inventory (quantity, sku_code)
+values (100,'SKU001'),
+    (200,'SKU002'),
+    (300,'SKU003'),
+    (400,'SKU004'),
+    (500,'SKU005')
 
-);--match model table. will be executed when boot up-will execute in naming order
+
+
+--match model table. will be executed when boot up-will execute in naming order

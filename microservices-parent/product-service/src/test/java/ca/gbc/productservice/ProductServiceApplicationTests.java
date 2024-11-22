@@ -103,6 +103,5 @@ class ProductServiceApplicationTests {
                 .body("[0].description", Matchers.equalTo("Samsung TV - Model 2024"))
                 .body("[0].price", Matchers.equalTo(2000));
 
-
     }
 }

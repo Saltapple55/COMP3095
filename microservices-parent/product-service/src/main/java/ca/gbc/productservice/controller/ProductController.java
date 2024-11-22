@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor //for dependency/constructor injection- otherwisewill need to write constructor in code
 public class ProductController {
     private final ProductService productService;
-    //how do we know what endpoint//method they want?
+    //how  do we know what endpoint//method they want?
 
     @PostMapping //a way to signal what status code
     @ResponseStatus(HttpStatus.CREATED)

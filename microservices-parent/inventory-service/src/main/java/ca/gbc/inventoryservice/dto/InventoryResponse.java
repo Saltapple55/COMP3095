@@ -1,2 +1,4 @@
-package ca.gbc.inventoryservice.dto;public class InventoryResponse {
+package ca.gbc.inventoryservice.dto;
+
+public class InventoryResponse {
 }
