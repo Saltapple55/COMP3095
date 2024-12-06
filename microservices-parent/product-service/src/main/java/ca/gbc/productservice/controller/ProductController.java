@@ -43,6 +43,9 @@ public class ProductController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ProductResponse> getAllProducts(){
+        /*
+        * */
+
         return productService.getAllProducts();
     }
     @PutMapping("/{productId}") //not creating/get-just update with Put

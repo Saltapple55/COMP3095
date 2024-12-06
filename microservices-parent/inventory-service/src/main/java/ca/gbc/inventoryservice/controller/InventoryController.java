@@ -1,6 +1,8 @@
 package ca.gbc.inventoryservice.controller;
 
 import ca.gbc.inventoryservice.service.InventoryService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

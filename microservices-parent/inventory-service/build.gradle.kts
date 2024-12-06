@@ -31,7 +31,6 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-contract-stub-runner:4.1.3")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     testImplementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     compileOnly("org.projectlombok:lombok")
@@ -43,6 +42,9 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.springframework.cloud:spring-cloud-circuitbreaker-resilience4j:3.1.2")
+    implementation("org.springframework.kafka:spring-kafka:3.3.0")
+    implementation("org.springframework.kafka:spring-kafka-test:3.3.0")
 }
 
 tasks.withType<Test> {

@@ -21,6 +21,9 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url=uri("https://packages.confluent.io/maven/")
+	}
 }
 
 dependencyManagement{
@@ -37,7 +40,14 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 	testImplementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+	implementation("io.confluent:kafka-avro-serializer:7.7.2")
+	implementation("io.confluent:kafka-schema-registry-client:7.7.2")
+	implementation("org.apache.avro:avro:1.12.0")
+//	implementation(project(":shared-schema")) //use : to specify local
 
+	implementation("org.springframework.cloud:spring-cloud-circuitbreaker-resilience4j:3.1.2")
+	implementation("org.springframework.kafka:spring-kafka:3.3.0")
+	implementation("org.springframework.kafka:spring-kafka-test:3.3.0")
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	compileOnly("org.projectlombok:lombok")
@@ -48,6 +58,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
+	testImplementation("org.testcontainers:kafka")
+
 	testImplementation("io.rest-assured:rest-assured:5.5.0")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
