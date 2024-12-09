@@ -1,6 +1,8 @@
 {
-"type": "record",
-"name:" "OrderPlacedEvent"
-"namespace": "ca.gbc.orderservice.event",
-"fields":
+  "type": "record",
+  "name": "OrderPlacedEvent",
+  "namespace": "ca.gbc.orderservice.event",
+  "fields": [
+
+  ]
 }

@@ -32,7 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.kafka:spring-kafka")
     compileOnly("org.projectlombok:lombok")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+   // developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
@@ -40,7 +40,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:kafka")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-//    implementation(project(":shared-schema")) //use : to specify local
+   implementation(project(":shared-schema")) //use : to specify local
 
     implementation("io.confluent:kafka-avro-serializer:7.7.2")
     implementation("io.confluent:kafka-schema-registry-client:7.7.2")

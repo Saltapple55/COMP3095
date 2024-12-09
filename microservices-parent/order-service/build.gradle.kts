@@ -43,7 +43,7 @@ dependencies {
 	implementation("io.confluent:kafka-avro-serializer:7.7.2")
 	implementation("io.confluent:kafka-schema-registry-client:7.7.2")
 	implementation("org.apache.avro:avro:1.12.0")
-//	implementation(project(":shared-schema")) //use : to specify local
+	implementation(project(":shared-schema")) //use : to specify local
 
 	implementation("org.springframework.cloud:spring-cloud-circuitbreaker-resilience4j:3.1.2")
 	implementation("org.springframework.kafka:spring-kafka:3.3.0")
@@ -51,7 +51,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	//developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

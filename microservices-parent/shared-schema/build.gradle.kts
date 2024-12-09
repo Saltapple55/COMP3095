@@ -1,32 +1,19 @@
 plugins {
-    java
-    id("java-library")
-    id("com.github.davidmc24.gradle.plugin.avro") version "1.5.0"
+    id("java")
 }
 
-group = "ca.gbc"
+group = "org.example"
 version = "0.0.1-SNAPSHOT"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.apache.avro:avro:1.12.0")
-
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-//avro{
-//    isCreateSetters=true
-//    fieldVisibility="PRIVATE"
-//    isEnabledDecimalLogicalType=true
-//}
-
-
-
+tasks.test {
+    useJUnitPlatform()
+}
