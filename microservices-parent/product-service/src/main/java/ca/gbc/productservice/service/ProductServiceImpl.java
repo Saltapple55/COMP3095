@@ -24,8 +24,10 @@ public class ProductServiceImpl implements ProductService
 
 
     @Override
-    public ProductResponse createProduct(ProductRequest productRequest) {
+    public ProductResponse createProduct(ProductRequest productRequest) throws InterruptedException {
         //can deploy logging in diff modes
+        Thread.sleep(5000);
+
         log.debug("Creating a new product {}", productRequest.name());
         Product product = Product.builder()
                 .name(productRequest.name())
@@ -42,7 +44,7 @@ public class ProductServiceImpl implements ProductService
     }
 
     @Override
-    public List<ProductResponse> getAllProducts() {
+    public List<ProductResponse> getAllProducts() throws InterruptedException {
 
         log.debug("Returning a list of products");
         List<Product> products=productRepository.findAll();

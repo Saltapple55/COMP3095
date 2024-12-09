@@ -38,6 +38,13 @@ dependencies {
     testImplementation("org.testcontainers:mongodb")
     testImplementation("io.rest-assured:rest-assured:5.5.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+
+    implementation("org.springframework.cloud:spring-cloud-circuitbreaker-resilience4j:3.1.2")
+    implementation("org.springframework.kafka:spring-kafka:3.3.0")
+    implementation("org.springframework.kafka:spring-kafka-test:3.3.0")
+    testImplementation("org.testcontainers:kafka")
+
 }
 
 tasks.withType<Test> {

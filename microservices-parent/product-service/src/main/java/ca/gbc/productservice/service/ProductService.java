@@ -11,9 +11,9 @@ import ca.gbc.productservice.repository.ProductRepository;
 import java.util.List;
 
 public interface ProductService {
-    ProductResponse createProduct(ProductRequest productRequest);
+    ProductResponse createProduct(ProductRequest productRequest) throws InterruptedException;
 
-    List<ProductResponse> getAllProducts();
+    List<ProductResponse> getAllProducts() throws InterruptedException;
 
     String updateProduct(String id, ProductRequest productRequest);
 

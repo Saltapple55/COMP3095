@@ -23,7 +23,7 @@ public class ProductController {
 
     @PostMapping //a way to signal what status code
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest){ //when call method-require in request
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) throws InterruptedException { //when call method-require in request
         ProductResponse createdproduct =productService.createProduct(productRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/product/"+createdproduct.id());
@@ -42,7 +42,7 @@ public class ProductController {
     //get request
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductResponse> getAllProducts(){
+    public List<ProductResponse> getAllProducts() throws InterruptedException {
         /*
         * */
 
