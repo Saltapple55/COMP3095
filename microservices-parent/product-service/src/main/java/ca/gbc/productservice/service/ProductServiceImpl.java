@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService
     @Override
     public ProductResponse createProduct(ProductRequest productRequest) throws InterruptedException {
         //can deploy logging in diff modes
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
 
         log.debug("Creating a new product {}", productRequest.name());
         Product product = Product.builder()

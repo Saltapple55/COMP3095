@@ -144,7 +144,7 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> fallbackRoute(){
        return route("fallbackRoute")
-               .route(RequestPredicates.all(),
+               .route(RequestPredicates.path("/fallbackRoute"),
                        request->ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
                                .body("Service Temporarily Unavailable, please try again later"))
                .build();
